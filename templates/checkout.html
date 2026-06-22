@@ -1,0 +1,221 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  {% if show_success %}
+    <section class="success-state animate-in">
+      <div class="success-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 6L9 17L4 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>¡Pago completado!</h2>
+      <p class="order-number">#{{ order_number }}</p>
+      <p style="color: var(--muted); margin-bottom: 24px;">{{ created_at }}</p>
+      
+      <div class="cart-summary-box" style="margin: 0 auto 24px; max-width: 400px;">
+        <div style="text-align: center; margin-bottom: 12px;">
+          <span style="font-size: 0.9rem; color: var(--muted);">Total pagado</span>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--green); margin-top: 4px;">$ {{ '%.2f'|format(total|float) }}</div>
+        </div>
+        <div class="row">
+          <span>Método de pago</span>
+          <span>{{ payment_method.title() }}</span>
+        </div>
+        <div class="row">
+          <span>Artículos</span>
+          <span>{{ cart_items|length }}</span>
+        </div>
+      </div>
+      
+      <p style="color: var(--muted); font-size: 0.9rem; max-width: 480px; margin: 0 auto 24px;">
+        Pago procesado sobre canal cifrado HTTPS con auditoría registrada.
+      </p>
+      
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <a href="{{ url_for('mis_compras') }}" class="btn btn-outline">Ver mis compras</a>
+        <a href="{{ url_for('index') }}" class="btn">Seguir comprando</a>
+      </div>
+    </section>
+  {% elif not cart_items %}
+    <div class="empty-state animate-in">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 6H3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M6 6L8.5 14.5H18.5L21 9H8.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9.5 20C10.3284 20 11 19.3284 11 18.5C11 17.6716 10.3284 17 9.5 17C8.67157 17 8 17.6716 8 18.5C8 19.3284 8.67157 20 9.5 20Z" fill="currentColor"/>
+        <path d="M17.5 20C18.3284 20 19 19.3284 19 18.5C19 17.6716 18.3284 17 17.5 17C16.6716 17 16 17.6716 16 18.5C16 19.3284 16.6716 20 17.5 20Z" fill="currentColor"/>
+      </svg>
+      <h3>Tu carrito está vacío</h3>
+      <p style="color: var(--muted); margin-bottom: 20px;">Aún no has agregado productos. Explora nuestro catálogo y encuentra lo mejor en tecnología.</p>
+      <a class="btn" href="{{ url_for('index') }}">Ir al catálogo</a>
+    </div>
+  {% else %}
+    <section class="page-header animate-in">
+      <h1>Checkout</h1>
+      <p class="page-subtitle">Completa tu compra con seguridad</p>
+    </section>
+
+    <div class="checkout-wrapper">
+      <div class="checkout-main">
+        <div class="checkout-card">
+          <h3>Datos del comprador</h3>
+          <div style="display: grid; gap: 12px;">
+            <div>
+              <label class="form-label">Email</label>
+              <input type="email" value="{{ current_user.email }}" disabled class="form-input" style="background: var(--bg-warm);">
+            </div>
+            <div>
+              <label class="form-label">Nombre</label>
+              <input type="text" value="{{ current_user.email.split('@')[0] }}" disabled class="form-input" style="background: var(--bg-warm);">
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-card">
+          <h3>Método de pago</h3>
+          
+          <div class="payment-tabs">
+            <button type="button" class="payment-tab yape active" data-payment="yape">Yape</button>
+            <button type="button" class="payment-tab visa" data-payment="visa">Visa</button>
+            <button type="button" class="payment-tab mastercard" data-payment="mastercard">Mastercard</button>
+          </div>
+
+          <form method="post" id="checkout-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="payment-content active" data-payment="yape">
+              <div class="payment-banner yape">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="2" width="16" height="20" rx="2" fill="#A855F7"/>
+                  <path d="M8 8H16M8 12H16M8 16H12" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                Pago móvil Yape
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">Número de celular</label>
+                {{ form.phone(class_="form-input", placeholder="999-999-999") }}
+              </div>
+            </div>
+
+            <div class="payment-content" data-payment="visa">
+              <div class="payment-banner visa">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2" y="6" width="20" height="12" rx="2" fill="#2563EB"/>
+                  <path d="M4 12H20" stroke="#fff" stroke-width="1.5"/>
+                </svg>
+                Pago con tarjeta Visa
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="card_holder">Titular</label>
+                {{ form.card_holder(class_="form-input", placeholder="Nombre como aparece en la tarjeta") }}
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="card_number">Número de tarjeta</label>
+                {{ form.card_number(class_="form-input", placeholder="1234-5678-9012-3456", id="card_number") }}
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label class="form-label" for="card_expiry">Vencimiento</label>
+                  {{ form.card_expiry(class_="form-input", placeholder="MM/AA", id="card_expiry") }}
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="card_cvv">CVV</label>
+                  {{ form.card_cvv(class_="form-input", placeholder="123") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="payment-content" data-payment="mastercard">
+              <div class="payment-banner mastercard">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="8" cy="12" r="6" fill="#EA580C"/>
+                  <circle cx="16" cy="12" r="6" fill="#F97316"/>
+                </svg>
+                Pago con tarjeta Mastercard
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="card_holder_mc">Titular</label>
+                {{ form.card_holder(class_="form-input", placeholder="Nombre como aparece en la tarjeta") }}
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="card_number_mc">Número de tarjeta</label>
+                {{ form.card_number(class_="form-input", placeholder="1234-5678-9012-3456") }}
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                  <label class="form-label" for="card_expiry_mc">Vencimiento</label>
+                  {{ form.card_expiry(class_="form-input", placeholder="MM/AA") }}
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="card_cvv_mc">CVV</label>
+                  {{ form.card_cvv(class_="form-input", placeholder="123") }}
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; margin-top: 20px; padding: 14px;" id="submit-btn">
+              Confirmar pago — $ {{ '%.2f'|format(total|float) }}
+            </button>
+          </form>
+
+          <p style="margin-top: 16px; font-size: 0.85rem; color: var(--muted); text-align: center;">
+            🔒 Pago procesado sobre canal cifrado HTTPS con auditoría registrada
+          </p>
+        </div>
+      </div>
+
+      <div class="checkout-summary">
+        <h3>Resumen del pedido</h3>
+        {% for item in cart_items %}
+          <div class="summary-item">
+            <span>{{ item.product['name'][:30] }}{% if item.product['name']|length > 30 %}...{% endif %} × {{ item.quantity }}</span>
+            <span>$ {{ '%.2f'|format(item.subtotal|float) }}</span>
+          </div>
+        {% endfor %}
+        <div class="summary-total">
+          <span>Total</span>
+          <span>$ {{ '%.2f'|format(total|float) }}</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-top: 12px; text-align: center;">Envío gratis en toda la tienda</p>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        const tabs = document.querySelectorAll('.payment-tab');
+        const contents = document.querySelectorAll('.payment-content');
+        const form = document.getElementById('checkout-form');
+        
+        tabs.forEach(tab => {
+          tab.addEventListener('click', function() {
+            const method = this.getAttribute('data-payment');
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelector('.payment-content[data-payment="' + method + '"]').classList.add('active');
+            document.getElementById('payment_method').value = method;
+          });
+        });
+
+        const cardNumber = document.getElementById('card_number');
+        if (cardNumber) {
+          cardNumber.addEventListener('input', function(e) {
+            let val = e.target.value.replace(/\D/g, '').substring(0, 16);
+            let formatted = val.match(/.{1,4}/g)?.join('-') || '';
+            e.target.value = formatted;
+          });
+        }
+
+        const cardExpiry = document.getElementById('card_expiry');
+        if (cardExpiry) {
+          cardExpiry.addEventListener('input', function(e) {
+            let val = e.target.value.replace(/\D/g, '').substring(0, 4);
+            if (val.length > 2) {
+              val = val.substring(0, 2) + '/' + val.substring(2);
+            }
+            e.target.value = val;
+          });
+        }
+      })();
+    </script>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <article class="product-detail animate-in">
+    <div>
+      {% set img_url = product['image_url'] %}
+      {% if img_url %}
+        <img src="{{ url_for('static', filename='../../instance/uploads/' ~ img_url) }}" alt="{{ product['name'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/placeholder.png') }}';">
+      {% else %}
+        <img src="{{ url_for('static', filename='img/placeholder.png') }}" alt="Sin imagen">
+      {% endif %}
+    </div>
+    <div>
+      <h2>{{ product['name'] }}</h2>
+      <p style="color: var(--muted); line-height: 1.7;">{{ product['description'] }}</p>
+      <div class="product-price">$ {{ '%.2f'|format(product['price']|float) }}</div>
+      
+      <form method="post" action="{{ url_for('add_to_cart') }}" style="margin-top: 24px; display: inline-flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        {{ cart_form.hidden_tag() }}
+        {{ cart_form.product_id() }}
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label for="quantity" style="font-size: 0.85rem; font-weight: 600; color: var(--muted);">Cantidad</label>
+          {{ cart_form.quantity(style="width: 80px; text-align: center;") }}
+        </div>
+        {{ cart_form.submit(class_="btn", style="align-self: flex-end;") }}
+      </form>
+
+      <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">
+        <a class="btn btn-outline" href="{{ url_for('index') }}">← Volver al catálogo</a>
+      </div>
+    </div>
+  </article>
+{% endblock %}
