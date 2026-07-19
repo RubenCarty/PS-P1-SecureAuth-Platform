@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <section class="cart-section">
+    <h2>Tu carrito</h2>
+    {% if cart_items %}
+      <div style="overflow-x: auto;">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th style="text-align: right;">Precio</th>
+              <th style="text-align: center;">Cantidad</th>
+              <th style="text-align: right;">Subtotal</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+              <tr>
+                <td>
+                  <div class="cart-item-info">
+                    {% set img_url = item.product['image_url'] %}
+                    {% if img_url %}
+                      <img class="cart-item-img" src="{{ url_for('static', filename='../../instance/uploads/' ~ img_url) }}" alt="{{ item.product['name'] }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/placeholder.png') }}';">
+                    {% else %}
+                      <img class="cart-item-img" src="{{ url_for('static', filename='img/placeholder.png') }}" alt="Sin imagen">
+                    {% endif %}
+                    <div>
+                      <div style="font-weight: 700; max-width: 260px;">{{ item.product['name'] }}</div>
+                      <div style="font-size: 0.8rem; color: var(--muted); margin-top: 2px;">Cód: {{ item.product['id'] }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="text-align: right; font-weight: 600;">$ {{ '%.2f'|format(item.product['price']|float) }}</td>
+                <td style="text-align: center;">
+                  <div class="quantity-control" style="display: inline-flex;">
+                  <form method="post" action="{{ url_for('update_cart', product_id=item.product['id']) }}" style="display: inline;">
+                    {{ csrf_token() }}
+                    <button type="submit" name="quantity" value="{{ item.quantity - 1 }}">−</button>
+                  </form>
+                    <span>{{ item.quantity }}</span>
+                    <form method="post" action="{{ url_for('update_cart', product_id=item.product['id']) }}" style="display: inline;">
+                      {{ csrf_token() }}
+                      <button type="submit" name="quantity" value="{{ item.quantity + 1 }}">+</button>
+                    </form>
+                  </div>
+                </td>
+                <td style="text-align: right; font-weight: 700; color: var(--indigo);">$ {{ '%.2f'|format(item.subtotal|float) }}</td>
+                <td style="text-align: right;">
+                  <form method="post" action="{{ url_for('remove_from_cart', product_id=item.product['id']) }}" style="display: inline;">
+                    {{ csrf_token() }}
+                    <button type="submit" class="btn btn-ghost" title="Eliminar" aria-label="Eliminar producto">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 7H20M10 11V17M14 11V17M6 7L8 4H16L18 7M7 7L8 20H16L17 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+<div class="cart-summary">
+         <div class="cart-summary-box">
+           <div class="row">
+             <span>Subtotal</span>
+             <span>$ {{ '%.2f'|format(total|float) }}</span>
+           </div>
+           <div class="row">
+             <label for="shipping" style="color: var(--muted);">Envío</label>
+           </div>
+           <div>
+             <input type="text" id="shipping" class="shipping-input" placeholder="Ciudad o código postal" autocomplete="off">
+           </div>
+           <div class="row" style="margin-top: 8px;">
+             <span style="color: var(--muted);">Envío</span>
+             <span>Gratis</span>
+           </div>
+           <div class="total">
+             <span>Total</span>
+             <span>$ {{ '%.2f'|format(total|float) }}</span>
+           </div>
+           <a href="{{ url_for('checkout') }}" class="btn" style="width: 100%; margin-top: 12px; justify-content: center; padding: 14px;">
+             Proceder al pago
+           </a>
+         </div>
+       </div>
+    {% else %}
+      <div class="empty-state">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 6H3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M6 6L8.5 14.5H18.5L21 9H8.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9.5 20C10.3284 20 11 19.3284 11 18.5C11 17.6716 10.3284 17 9.5 17C8.67157 17 8 17.6716 8 18.5C8 19.3284 8.67157 20 9.5 20Z" fill="currentColor"/>
+          <path d="M17.5 20C18.3284 20 19 19.3284 19 18.5C19 17.6716 18.3284 17 17.5 17C16.6716 17 16 17.6716 16 18.5C16 19.3284 16.6716 20 17.5 20Z" fill="currentColor"/>
+        </svg>
+        <h3>Tu carrito está vacío</h3>
+        <p style="color: var(--muted); margin-bottom: 20px;">Aún no has agregado productos. Explora nuestro catálogo y encuentra lo mejor en tecnología.</p>
+        <a class="btn" href="{{ url_for('index') }}">Ir al catálogo</a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

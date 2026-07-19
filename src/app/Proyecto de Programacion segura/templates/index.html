@@ -1,0 +1,136 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <!-- Hero -->
+  <section class="hero animate-in">
+    <div class="hero-content">
+      <h1>Tecnología que protege,<br>tecnología que inspira.</h1>
+      <p>Descubre productos de seguridad tecnológica seleccionados para profesionales. Calidad garantizada y envío seguro.</p>
+      <a class="btn" href="#catalog" style="background: #fff; color: var(--indigo);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 8.5L12 3 3 8.5L12 14L21 8.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        Ver productos
+      </a>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section id="catalog">
+    <div class="toolbar animate-in">
+      <div class="search-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Buscar productos..." autocomplete="off">
+      </div>
+      <div class="filters" id="categoryFilters">
+        <button class="filter-btn active" data-category="all">Todos</button>
+        <button class="filter-btn" data-category="Electrónica">Electrónica</button>
+        <button class="filter-btn" data-category="Ropa">Ropa</button>
+        <button class="filter-btn" data-category="Hogar">Hogar</button>
+        <button class="filter-btn" data-category="Deportes">Deportes</button>
+        <button class="filter-btn" data-category="Libros">Libros</button>
+        <button class="filter-btn" data-category="Otros">Otros</button>
+      </div>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      {% for product in products %}
+        {% set in_cart = false %}
+        {% set p_id = product['id'] | string %}
+        {% if session.get('cart', {}).get(p_id) %}
+          {% set in_cart = true %}
+        {% endif %}
+        
+        {% set img_url = product['image_url'] %}
+        {% set category = product['category'] if product['category'] else 'Otros' %}
+
+        <article class="product-card animate-in" data-name="{{ product['name']|lower }}" data-category="{{ category }}" data-product-id="{{ product['id'] }}">
+          <div class="product-image-wrap">
+            {% if img_url %}
+              <img class="product-image" src="{{ url_for('static', filename='../../instance/uploads/' ~ img_url) }}" alt="{{ product['name'] }}" loading="lazy" onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/placeholder.png') }}';">
+            {% else %}
+              <img class="product-image" src="{{ url_for('static', filename='img/placeholder.png') }}" alt="Sin imagen" loading="lazy">
+            {% endif %}
+            <span class="category-badge">{{ category }}</span>
+            {% if not product['in_stock'] %}
+              <div class="out-of-stock-overlay"><span>Agotado</span></div>
+            {% endif %}
+          </div>
+          <div class="product-body">
+            <h3>{{ product['name'] }}</h3>
+            <p>{{ product['description'] }}</p>
+            <div class="product-footer">
+              <span class="product-price">$ {{ '%.2f'|format(product['price']|float) }}</span>
+              {% if in_cart %}
+                <button class="btn btn-outline btn-sm" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  En carrito
+                </button>
+              {% else %}
+                <form method="post" action="{{ url_for('add_to_cart') }}" style="display: inline;">
+                  {{ csrf_token() }}
+                  <input type="hidden" name="product_id" value="{{ product['id'] }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="btn btn-sm add-to-cart-btn" data-product-id="{{ product['id'] }}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Agregar
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div id="noResults" style="display:none; text-align:center; padding: 48px; color: var(--muted);">
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.1rem;">No se encontraron productos</h3>
+      <p style="margin-top: 8px;">Intenta con otra búsqueda o categoría.</p>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  const searchInput = document.getElementById('searchInput');
+  const filters = document.querySelectorAll('.filter-btn');
+  const grid = document.getElementById('productsGrid');
+  const cards = Array.from(grid.querySelectorAll('.product-card'));
+  const noResults = document.getElementById('noResults');
+  let activeCategory = 'all';
+
+  function filterCards() {
+    const term = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach(card => {
+      const cat = card.getAttribute('data-category');
+      const name = card.getAttribute('data-name');
+      const matchesCategory = activeCategory === 'all' || cat === activeCategory;
+      const matchesSearch = !term || name.includes(term);
+      const show = matchesCategory && matchesSearch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    noResults.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.getAttribute('data-category');
+      filterCards();
+    });
+  });
+
+  searchInput.addEventListener('input', filterCards);
+})();
+</script>
+{% endblock %}

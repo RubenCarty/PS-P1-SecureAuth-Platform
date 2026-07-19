@@ -1,0 +1,222 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <!-- Hero -->
+  <section class="hero animate-in">
+    <div class="hero-content">
+      <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-bottom: 12px;">
+        🔒 Plataforma segura con OAuth 2.0 + Azure
+      </span>
+      <h1>SECUREAUTH PLATFORM</h1>
+      <p>Tienda online con imágenes alojadas en Azure Blob Storage y sesiones protegidas. Security by design en cada transacción.</p>
+    </div>
+  </section>
+
+  <!-- Security Features -->
+  <section class="security-features animate-in" style="margin-bottom: 48px;">
+    <div class="toolbar" style="margin-bottom: 24px;">
+      <h2 style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.5rem; margin: 0;">Características de Seguridad</h2>
+    </div>
+    <div class="products-grid">
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M12 2L20 6V12C20 17 16.5 20.8 12 22C7.5 20.8 4 17 4 12V6L12 2Z" fill="#4F46E5"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">OAuth 2.0 + Entra ID</h3>
+        </div>
+      </div>
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M21 8.5L12 3 3 8.5L12 14L21 8.5Z" stroke="#8B5CF6" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M3 8.5V16.5L12 21V14" stroke="#8B5CF6" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">Azure Blob Storage</h3>
+        </div>
+      </div>
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M12 2L20 6V12C20 17 16.5 20.8 12 22C7.5 20.8 4 17 4 12V6L12 2Z" fill="#4F46E5"/>
+            <path d="M5 12H19" stroke="#fff" stroke-width="2"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">HTTPS + HSTS + CSP</h3>
+        </div>
+      </div>
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M12 2L20 6V12C20 17 16.5 20.8 12 22C7.5 20.8 4 17 4 12V6L12 2Z" fill="#4F46E5"/>
+            <path d="M8 12H16M8 8V16" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">RBAC</h3>
+        </div>
+      </div>
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M13 2L3 14H12L8 22L18 10H10L13 2Z" stroke="#8B5CF6" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">Rate Limiting</h3>
+        </div>
+      </div>
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M10 2V12C10 16.4 13.6 20 18 20C19.1 20 20 19.1 20 18C20 16.9 19.1 16 18 16C14.7 16 12 13.3 12 10V2H10Z" fill="#4F46E5"/>
+            <path d="M6 20L4 12H6C6 14.2 7.8 16 10 16V20" fill="#8B5CF6"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">Azure Key Vault</h3>
+        </div>
+      </div>
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="#8B5CF6" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M14 2V8H20" stroke="#8B5CF6" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M8 12H16M8 16H12" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">Validación de archivos</h3>
+        </div>
+      </div>
+      <div class="product-card" style="cursor: default;">
+        <div class="product-body" style="text-align: center; padding: 24px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto 12px;">
+            <path d="M9 6H21" stroke="#4F46E5" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M9 12H21" stroke="#4F46E5" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M9 18H21" stroke="#4F46E5" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M3.5 6.5L4.5 7.5L6.5 5.5" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <h3 style="font-size: 0.95rem; margin: 0;">Auditoría</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section id="catalog">
+    <div class="toolbar animate-in">
+      <div class="search-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Buscar productos..." autocomplete="off">
+      </div>
+      <div class="filters" id="categoryFilters">
+        <button class="filter-btn active" data-category="all">Todos</button>
+        <button class="filter-btn" data-category="Electrónica">Electrónica</button>
+        <button class="filter-btn" data-category="Ropa">Ropa</button>
+        <button class="filter-btn" data-category="Hogar">Hogar</button>
+        <button class="filter-btn" data-category="Deportes">Deportes</button>
+        <button class="filter-btn" data-category="Libros">Libros</button>
+        <button class="filter-btn" data-category="Otros">Otros</button>
+      </div>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      {% for product in products %}
+        {% set in_cart = false %}
+        {% set p_id = product['id'] | string %}
+        {% if session.get('cart', {}).get(p_id) %}
+          {% set in_cart = true %}
+        {% endif %}
+        
+        {% set img_url = product['image_url'] %}
+        {% set category = product['category'] or 'Otros' %}
+
+        <article class="product-card animate-in" data-name="{{ product['name']|lower }}" data-category="{{ category }}" data-product-id="{{ product['id'] }}">
+          <div class="product-image-wrap">
+            {% if img_url %}
+              <img class="product-image" src="{{ url_for('static', filename='../../instance/uploads/' ~ img_url) }}" alt="{{ product['name'] }}" loading="lazy" onerror="this.onerror=null;this.src='{{ url_for('static', filename='img/placeholder.png') }}';">
+            {% else %}
+              <img class="product-image" src="{{ url_for('static', filename='img/placeholder.png') }}" alt="Sin imagen" loading="lazy">
+            {% endif %}
+            <span class="category-badge">{{ category }}</span>
+            {% if not product['stock'] %}
+              <div class="out-of-stock-overlay"><span>Agotado</span></div>
+            {% endif %}
+          </div>
+          <div class="product-body">
+            <h3>{{ product['name'] }}</h3>
+            <p>{{ product['description'] }}</p>
+            <div class="product-footer">
+              <span class="product-price">$ {{ '%.2f'|format(product['price']|float) }}</span>
+              {% if in_cart %}
+                <button class="btn btn-outline btn-sm" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  En carrito
+                </button>
+              {% else %}
+                <form method="post" action="{{ url_for('add_to_cart') }}" style="display: inline;">
+                  {{ csrf_token() }}
+                  <input type="hidden" name="product_id" value="{{ product['id'] }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="btn btn-sm add-to-cart-btn" data-product-id="{{ product['id'] }}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Agregar
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div id="noResults" style="display:none; text-align:center; padding: 48px; color: var(--muted);">
+      <h3 style="font-family: 'Inter', sans-serif; font-size: 1.1rem;">No se encontraron productos</h3>
+      <p style="margin-top: 8px;">Intenta con otra búsqueda o categoría.</p>
+    </div>
+  </section>
+
+  <footer class="animate-in" style="text-align: center; padding: 48px 0 32px; margin-top: 48px; border-top: 1px solid var(--border);">
+    <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 16px;">
+      SECUREAUTH 2026 · <strong>Azure App Service · Entra ID · RBAC · HSTS/CSP · Key Vault</strong>
+    </p>
+    <p style="color: var(--muted); font-size: 0.8rem;">&copy; 2026 SECUREAUTH. Todos los derechos reservados.</p>
+  </footer>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  const searchInput = document.getElementById('searchInput');
+  const filters = document.querySelectorAll('.filter-btn');
+  const grid = document.getElementById('productsGrid');
+  const cards = Array.from(grid.querySelectorAll('.product-card'));
+  const noResults = document.getElementById('noResults');
+  let activeCategory = 'all';
+
+  function filterCards() {
+    const term = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach(card => {
+      const cat = card.getAttribute('data-category');
+      const name = card.getAttribute('data-name');
+      const matchesCategory = activeCategory === 'all' || cat === activeCategory;
+      const matchesSearch = !term || name.includes(term);
+      const show = matchesCategory && matchesSearch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    noResults.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.getAttribute('data-category');
+      filterCards();
+    });
+  });
+
+  searchInput.addEventListener('input', filterCards);
+})();
+</script>
+{% endblock %}

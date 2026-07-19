@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <section class="animate-in">
+    <header class="page-header">
+      <h1>Mis Compras</h1>
+    </header>
+
+    <div class="profile-stats" style="margin-bottom: 24px;">
+      <div class="stat-card">
+        <div class="stat-value">{{ purchases|length }}</div>
+        <div class="stat-label">Total compras</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ purchases|selectattr('status', 'equalto', 'completed')|list|length }}</div>
+        <div class="stat-label">Completadas</div>
+      </div>
+    </div>
+
+    {% for purchase in purchases %}
+      <div class="purchase-history-card">
+        <div class="purchase-header">
+          <span class="purchase-id">#{{ purchase['order_number'] }}</span>
+          <span style="color: var(--muted); font-size: 0.85rem;">{{ purchase['created_at'].split('T')[0] }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="badge {% if purchase['payment_method'] == 'yape' %}badge-tag{% elif purchase['payment_method'] == 'visa' %}badge-stock{% else %}badge-warning{% endif %}">{{ purchase['payment_method'].title() }}</span>
+          <span class="badge {% if purchase['status'] == 'completed' %}badge-stock{% elif purchase['status'] == 'pending' %}badge-warning{% else %}badge-danger{% endif %}">{{ purchase['status'].title() }}</span>
+        </div>
+        <div style="margin-top: 8px; font-weight: 700;">${{ '%.2f'|format(purchase['total']/100) }}</div>
+      </div>
+    {% else %}
+      <div class="empty-state" style="padding: 48px 0;">
+        <p style="color: var(--muted);">Aún no has realizado ninguna compra.</p>
+        <a href="{{ url_for('index') }}" class="btn" style="margin-top: 16px;">Ir al catálogo</a>
+      </div>
+    {% endfor %}
+  </section>
+{% endblock %}

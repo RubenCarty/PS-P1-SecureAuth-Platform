@@ -1,0 +1,12 @@
+- [x] Login con estética security by design (logo escudo, botón Microsoft, badges de seguridad)
+- [x] Base de datos con entidades purchases, purchase_items y audit_logs
+- [x] Usuarios de prueba predefinidos con contraseñas seguras
+- [x] Catálogo con SecurityFeatures y hero mejorado
+- [x] Carrito con redirección a checkout
+- [x] Checkout con 3 métodos de pago (Yape, Visa, Mastercard) y pantalla de éxito
+- [x] Perfil con estadísticas y historial de compras
+- [x] Mis compras con vista compacta
+- [x] Panel admin con pestañas (Productos, Clientes, Auditoría)
+- [x] Navbar con avatar y nombre de usuario
+- [x] Dark mode con variables CSS
+- [x] Notificaciones por email al administrador

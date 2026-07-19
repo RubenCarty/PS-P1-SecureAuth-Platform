@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <div class="login-wrapper">
+    <section class="login-hero">
+      <div class="login-hero-bg"></div>
+      
+      <div class="login-card animate-in">
+        <div class="login-header">
+          <div class="login-logo">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L20 6V12C20 17 16.5 20.8 12 22C7.5 20.8 4 17 4 12V6L12 2Z" fill="#4F46E5"/>
+              <path d="M12 6.5L17 9V12.2C17 15.5 14.7 17.8 12 18.7C9.3 17.8 7 15.5 7 12.2V9L12 6.5Z" fill="#8B5CF6" fill-opacity="0.35"/>
+              <path d="M10.2 12.2L11.4 13.4L13.9 10.9" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h1 class="login-title">SECUREAUTH</h1>
+          <p class="login-subtitle">Tienda Online Segura · OAuth 2.0 + Entra ID</p>
+        </div>
+
+        <div class="security-banner">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+            <path d="M12 2L20 6V12C20 17 16.5 20.8 12 22C7.5 20.8 4 17 4 12V6L12 2Z" fill="#4F46E5"/>
+          </svg>
+          <span>Autenticación federada mediante Microsoft Entra ID con protección RBAC y rate limiting</span>
+        </div>
+
+        <a class="btn microsoft-btn" href="{{ url_for('login_microsoft') }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="10" height="10" fill="#F25022"/>
+            <rect x="12" width="10" height="10" fill="#7FBA00"/>
+            <rect y="12" width="10" height="10" fill="#00A4EF"/>
+            <rect x="12" y="12" width="10" height="10" fill="#FFB900"/>
+          </svg>
+          Continuar con Microsoft
+        </a>
+
+        <div class="login-separator">
+          <span>o credenciales autorizadas</span>
+        </div>
+
+        <form method="post" novalidate class="login-form">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            <label for="email" class="form-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+              Correo electrónico
+            </label>
+            {{ form.email(class_="form-input", placeholder="usuario@outlook.com") }}
+          </div>
+          <div class="form-group">
+            <label for="password" class="form-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 11H5C3.895 11 3 11.895 3 13V19C3 20.105 3.895 21 5 21H19C20.105 21 21 20.105 21 19V13C21 11.895 20.105 11 19 11Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M7 11V7C7 4.239 9.239 2 12 2C14.761 2 17 4.239 17 7V11" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+              Contraseña
+            </label>
+            {{ form.password(class_="form-input", placeholder="••••••••") }}
+          </div>
+          <button type="submit" class="btn btn-primary w-full">
+            <span>Iniciar sesión</span>
+          </button>
+        </form>
+
+        <div class="security-footer">
+          <span class="security-badge">🔒 HTTPS·HSTS</span>
+          <span class="security-badge">🛡️ CSRF</span>
+          <span class="security-badge">⚡ Rate Limiting</span>
+          <span class="security-badge">🔑 Key Vault</span>
+        </div>
+
+        <p class="access-restricted">Acceso restringido a usuarios autorizados</p>
+      </div>
+    </section>
+  </div>
+{% endblock %}
