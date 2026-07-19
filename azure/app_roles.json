@@ -1,0 +1,18 @@
+[
+  {
+    "allowedMemberTypes": ["User"],
+    "description": "Puede administrar productos y consultar auditoría.",
+    "displayName": "Administrador",
+    "id": "6d6950f0-9ca1-4caf-aee2-cdb30b31d87c",
+    "isEnabled": true,
+    "value": "Admin"
+  },
+  {
+    "allowedMemberTypes": ["User"],
+    "description": "Puede comprar y consultar sus pedidos.",
+    "displayName": "Cliente",
+    "id": "1bc5fd24-69a4-4a57-a919-c37e2f146a98",
+    "isEnabled": true,
+    "value": "Customer"
+  }
+]

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Auditoría · SecureAuth Store{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">Trazabilidad</span><h1>Últimos eventos de auditoría</h1></div><a class="button button-secondary" href="{{ url_for('admin.dashboard') }}">Volver</a></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Fecha</th><th>Acción</th><th>Usuario</th><th>Recurso</th><th>Resultado</th><th>Request ID</th></tr></thead>
+<tbody>{% for log in logs %}<tr><td>{{ log.created_at.strftime('%d/%m/%Y %H:%M:%S') }}</td><td>{{ log.action }}</td><td>{{ log.username or log.user_oid or 'Anónimo' }}</td><td>{{ log.resource_type or '-' }} {{ log.resource_id or '' }}</td><td><span class="badge {% if not log.success %}badge-danger{% endif %}">{{ 'OK' if log.success else 'Fallo' }}</span></td><td><code>{{ log.request_id }}</code></td></tr>{% else %}<tr><td colspan="6">No hay eventos.</td></tr>{% endfor %}</tbody>
+</table>
+</div>
+{% endblock %}

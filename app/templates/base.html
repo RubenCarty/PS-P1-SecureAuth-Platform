@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SecureAuth Store, tienda académica segura con Microsoft Entra ID y Azure.">
+  <title>{% block title %}SecureAuth Store{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Navegación principal">
+      <a class="brand" href="{{ url_for('store.catalog') }}">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>SecureAuth Store</span>
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('store.catalog') }}">Catálogo</a>
+        {% if current_user %}
+          <a href="{{ url_for('store.cart') }}">Carrito</a>
+          <a href="{{ url_for('store.orders') }}">Pedidos</a>
+          {% if 'Admin' in current_user.roles %}
+            <a href="{{ url_for('admin.dashboard') }}">Administración</a>
+          {% endif %}
+          <span class="user-chip">{{ current_user.name }}</span>
+          <form class="inline-form" method="post" action="{{ url_for('auth.logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="link-button" type="submit">Salir</button>
+          </form>
+        {% else %}
+          <a class="button button-small"href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <main class="container main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="status">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>SecureAuth Platform</span>
+      <span>OAuth 2.0 · Azure · Flask</span>
+    </div>
+  </footer>
+</body>
+</html>

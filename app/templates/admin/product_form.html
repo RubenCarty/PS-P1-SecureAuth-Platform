@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if product else 'Nuevo' }} producto · SecureAuth Store{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">Administración segura</span><h1>{{ 'Editar producto' if product else 'Nuevo producto' }}</h1></div></div>
+<form class="panel form-grid" method="post" enctype="multipart/form-data" novalidate>
+  {{ form.hidden_tag() }}
+  <label class="field"><span>{{ form.name.label.text }}</span>{{ form.name(maxlength=120) }}{% for e in form.name.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</label>
+  <label class="field"><span>{{ form.category.label.text }}</span>{{ form.category(maxlength=80) }}{% for e in form.category.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</label>
+  <label class="field field-wide"><span>{{ form.description.label.text }}</span>{{ form.description(rows=6, maxlength=2000) }}{% for e in form.description.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</label>
+  <label class="field"><span>{{ form.price.label.text }}</span>{{ form.price(step='0.01', min='0.01') }}{% for e in form.price.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</label>
+  <label class="field"><span>{{ form.stock.label.text }}</span>{{ form.stock(min='0') }}{% for e in form.stock.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</label>
+  <label class="field field-wide"><span>{{ form.image.label.text }} (JPEG, PNG o WEBP; máx. 2 MB)</span>{{ form.image(accept='image/jpeg,image/png,image/webp') }}{% for e in form.image.errors %}<small class="field-error">{{ e }}</small>{% endfor %}</label>
+  <label class="check-field">{{ form.active() }} <span>{{ form.active.label.text }}</span></label>
+  <div class="form-actions"><a class="button button-secondary" href="{{ url_for('admin.dashboard') }}">Cancelar</a>{{ form.submit(class_='button') }}</div>
+</form>
+{% endblock %}

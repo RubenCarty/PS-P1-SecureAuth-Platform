@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Carrito · SecureAuth Store{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">Tu selección</span><h1>Carrito de compras</h1></div></div>
+{% if items %}
+  <div class="cart-layout">
+    <section class="cart-list">
+      {% for item in items %}
+        <article class="cart-item">
+          <div>
+            <span class="category">{{ item.product.category }}</span>
+            <h2>{{ item.product.name }}</h2>
+            <p>S/ {{ '%.2f'|format(item.product.price) }} por unidad</p>
+          </div>
+          <form class="cart-actions" method="post" action="{{ url_for('store.update_cart', item_id=item.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Cantidad <input type="number" name="quantity" min="0" max="20" value="{{ item.quantity }}" required></label>
+            <button class="button button-secondary" type="submit">Actualizar</button>
+          </form>
+          <strong>S/ {{ '%.2f'|format(item.product.price * item.quantity) }}</strong>
+        </article>
+      {% endfor %}
+    </section>
+    <aside class="summary-card">
+      <span>Total</span>
+      <strong>S/ {{ '%.2f'|format(total) }}</strong>
+      <form method="post" action="{{ url_for('store.checkout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="button button-full" type="submit">Confirmar pedido simulado</button>
+      </form>
+      <small>No se integra una pasarela de pago real en esta versión académica.</small>
+    </aside>
+  </div>
+{% else %}
+  <div class="empty-state"><h2>Tu carrito está vacío</h2><a class="button" href="{{ url_for('store.catalog') }}">Explorar catálogo</a></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Administración · SecureAuth Store{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><span class="eyebrow">RBAC: Admin</span><h1>Gestión de productos</h1></div>
+  <div class="heading-actions"><a class="button button-secondary" href="{{ url_for('admin.audit_logs') }}">Auditoría</a><a class="button" href="{{ url_for('admin.product_create') }}">Nuevo producto</a></div>
+</div>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr></thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>{{ product.name }}</td><td>{{ product.category }}</td><td>S/ {{ '%.2f'|format(product.price) }}</td><td>{{ product.stock }}</td>
+      <td><span class="badge {% if not product.active %}badge-danger{% endif %}">{{ 'Activo' if product.active else 'Inactivo' }}</span></td>
+      <td class="actions"><a href="{{ url_for('admin.product_edit', product_id=product.id) }}">Editar</a>{% if product.active %}<form method="post" action="{{ url_for('admin.product_disable', product_id=product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="danger-link" type="submit">Desactivar</button></form>{% endif %}</td>
+    </tr>
+    {% else %}<tr><td colspan="6">No hay productos registrados.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
