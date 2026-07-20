@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+Voucher #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+<section class="receipt">
+    <div class="alert success">
+        Compra realizada correctamente.
+    </div>
+
+    <div class="card">
+        <p class="eyebrow">COMPROBANTE</p>
+        <h1>Voucher de compra</h1>
+
+        <p>
+            Pedido:
+            <strong>#{{ order.id }}</strong>
+        </p>
+
+        <p>
+            Fecha:
+            {{ order.created_at.strftime(
+                "%d/%m/%Y %H:%M"
+            ) }}
+        </p>
+
+        <p>
+            Estado:
+            <strong>{{ order.status }}</strong>
+        </p>
+
+        <hr>
+
+        {% for item in order.items %}
+            <div class="order-line">
+                <span>
+                    {{ item.product_name }}
+                    × {{ item.quantity }}
+                </span>
+
+                <strong>
+                    S/
+                    {{ "%.2f"|format(
+                        item.unit_price * item.quantity
+                    ) }}
+                </strong>
+            </div>
+        {% endfor %}
+
+        <hr>
+
+        <div class="order-line">
+            <strong>Total pagado</strong>
+
+            <strong>
+                S/ {{ "%.2f"|format(order.total) }}
+            </strong>
+        </div>
+
+        <p>
+            Método:
+            {{ order.payment_provider }}
+        </p>
+
+        <p>
+            Datos terminados en:
+            **** {{ order.payment_last4 }}
+        </p>
+
+        <p>
+            Referencia:
+            {{ order.payment_reference }}
+        </p>
+
+        <p class="security-note">
+            Operación simulada con fines académicos.
+        </p>
+
+        <button
+            class="button"
+            type="button"
+            onclick="window.print()"
+        >
+            Imprimir o guardar como PDF
+        </button>
+    </div>
+</section>
+{% endblock %}

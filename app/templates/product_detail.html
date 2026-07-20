@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ product.name }} · SecureAuth Store
+{% endblock %}
+
+{% block content %}
+<section class="product-detail">
+  <div class="detail-image">
+    {% if product.image_blob_name %}
+      <img
+        src="{{ url_for(
+          'static',
+          filename='uploads/' ~ product.image_blob_name
+        ) }}"
+        alt="{{ product.name }}"
+        class="product-detail-image"
+      >
+    {% else %}
+      <div class="placeholder">S</div>
+    {% endif %}
+  </div>
+
+  <div class="detail-copy">
+    <span class="category">
+      {{ product.category }}
+    </span>
+
+    <h1>{{ product.name }}</h1>
+
+    <p class="detail-description">
+      {{ product.description }}
+    </p>
+
+    <p class="detail-price">
+      S/ {{ '%.2f'|format(product.price) }}
+    </p>
+
+    <p>
+      {{ product.stock }} unidades disponibles
+    </p>
+
+    {% if product.stock > 0 %}
+      {% if current_user %}
+        <form
+          class="buy-form"
+          method="post"
+          action="{{ url_for(
+            'store.add_to_cart',
+            product_id=product.id
+          ) }}"
+        >
+          <input
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+          >
+
+          <label>
+            Cantidad
+
+            <input
+              type="number"
+              name="quantity"
+              min="1"
+              max="{{ [product.stock, 20]|min }}"
+              value="1"
+              required
+            >
+          </label>
+
+          <button
+            class="button"
+            type="submit"
+          >
+            Agregar al carrito
+          </button>
+        </form>
+      {% else %}
+        <a
+          class="button"
+          href="{{ url_for(
+            'auth.login',
+            next=request.path
+          ) }}"
+        >
+          Ingresar para comprar
+        </a>
+      {% endif %}
+    {% else %}
+      <span class="badge badge-danger">
+        Sin stock
+      </span>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

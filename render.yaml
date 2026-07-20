@@ -1,0 +1,72 @@
+# Despliegue en Render (plan gratuito)
+#
+# Uso:
+#   1. Subir el proyecto a GitHub.
+#   2. En render.com: New > Blueprint > seleccionar el repo.
+#   3. Render lee este archivo y crea el servicio web + la
+#      base de datos PostgreSQL.
+#   4. Completar en el panel las variables marcadas como
+#      sync: false (secretos: SMTP y pepper).
+#
+# HTTPS con certificado válido y HSTS quedan activos de
+# forma automática en el dominio *.onrender.com.
+
+services:
+  - type: web
+    name: secureauth-store
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    # Migra el esquema y carga el catálogo antes de servir.
+    preDeployCommand: flask --app run.py db upgrade && python seed.py
+    startCommand: >-
+      gunicorn --bind=0.0.0.0:$PORT --workers=2 --threads=4
+      --timeout=120 --access-logfile=- --error-logfile=- "run:app"
+    healthCheckPath: /catalogo
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: APP_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: SESSION_MINUTES
+        value: "30"
+
+      # Secretos generados automáticamente por Render
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: AUDIT_HMAC_KEY
+        generateValue: true
+      - key: PASSWORD_PEPPER
+        generateValue: true
+
+      # Base de datos administrada
+      - key: DATABASE_URL
+        fromDatabase:
+          name: secureauth-db
+          property: connectionString
+
+      # Correo del segundo factor: completar en el panel
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+
+      - key: OTP_TTL_SECONDS
+        value: "300"
+      - key: OTP_MAX_ATTEMPTS
+        value: "5"
+
+databases:
+  - name: secureauth-db
+    plan: free
+    databaseName: secureauth
+    user: secureauth

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Catálogo · SecureAuth Store{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <span class="eyebrow">Compra con confianza</span>
+    <h1>Tecnología y estilo con seguridad desde el inicio.</h1>
+    <p>Autenticación en dos pasos, datos protegidos y una experiencia rápida y clara.</p>
+  </div>
+  <div class="security-card">
+    <strong>Seguridad integrada</strong>
+    <span>OAuth 2.0</span><span>CSRF</span><span>RBAC</span><span>CSP</span>
+  </div>
+</section>
+
+<form class="filters" method="get" action="{{ url_for('store.catalog') }}">
+  <label>
+    <span>Buscar</span>
+    <input type="search" name="q" maxlength="80" value="{{ q }}" placeholder="Producto o categoría">
+  </label>
+  <label>
+    <span>Ordenar</span>
+    <select name="sort">
+      <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Más recientes</option>
+      <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Menor precio</option>
+      <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Mayor precio</option>
+      <option value="name" {% if sort == 'name' %}selected{% endif %}>Nombre</option>
+    </select>
+  </label>
+  <button class="button" type="submit">Aplicar</button>
+</form>
+
+<section class="product-grid" aria-label="Productos">
+  {% for product in products %}
+    <article class="product-card">
+      <a class="product-image" href="{{ url_for('store.product_detail', product_id=product.id) }}">
+        {% if product.image_blob_name %}
+        <img
+          src="{{ url_for(
+            'static',
+            filename='uploads/' ~ product.image_blob_name
+          ) }}"
+          alt="{{ product.name }}"
+          class="product-image"
+          loading="lazy"
+        >
+      {% else %}
+        <div class="product-placeholder">
+          S
+        </div>
+      {% endif %}
+      </a>
+      <div class="product-body">
+        <span class="category">{{ product.category }}</span>
+        <h2><a href="{{ url_for('store.product_detail', product_id=product.id) }}">{{ product.name }}</a></h2>
+        <p>{{ product.description|truncate(110) }}</p>
+        <div class="product-footer">
+          <strong>S/ {{ '%.2f'|format(product.price) }}</strong>
+          <span class="stock">{{ product.stock }} disponibles</span>
+        </div>
+
+        {% if product.stock > 0 %}
+          {% if current_user %}
+            <form
+              class="add-to-cart"
+              method="post"
+              action="{{ url_for('store.add_to_cart', product_id=product.id) }}"
+            >
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              >
+              <input type="hidden" name="quantity" value="1">
+              <button class="button button-full button-small" type="submit">
+                Agregar al carrito
+              </button>
+            </form>
+          {% else %}
+            <a
+              class="button button-full button-small button-secondary"
+              href="{{ url_for('auth.login', next=url_for('store.product_detail', product_id=product.id)) }}"
+            >
+              Inicia sesión para comprar
+            </a>
+          {% endif %}
+        {% else %}
+          <p class="stock-out">Sin stock</p>
+        {% endif %}
+      </div>
+    </article>
+  {% else %}
+    <div class="empty-state"><h2>No encontramos productos</h2><p>Prueba con otra búsqueda.</p></div>
+  {% endfor %}
+</section>
+
+{% if pagination.pages > 1 %}
+<nav class="pagination" aria-label="Paginación">
+  {% if pagination.has_prev %}<a href="{{ url_for('store.catalog', page=pagination.prev_num, q=q, sort=sort) }}">Anterior</a>{% endif %}
+  <span>Página {{ pagination.page }} de {{ pagination.pages }}</span>
+  {% if pagination.has_next %}<a href="{{ url_for('store.catalog', page=pagination.next_num, q=q, sort=sort) }}">Siguiente</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

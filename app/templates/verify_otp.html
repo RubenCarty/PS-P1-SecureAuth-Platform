@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Verificación en dos pasos{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <section class="auth-card">
+    <div class="auth-mark">S</div>
+
+    <h1>Verificación en dos pasos</h1>
+    <p class="auth-sub">
+      Enviamos un código de 6 dígitos a
+      {% if masked_email %}<strong>{{ masked_email }}</strong>{% else %}tu correo{% endif %}.
+      Ingrésalo para completar el acceso.
+    </p>
+
+    <form method="post" class="auth-form">
+      {{ form.hidden_tag() }}
+
+      <label class="field">
+        {{ form.code.label.text }}
+        {{ form.code(
+            autocomplete="one-time-code",
+            inputmode="numeric",
+            pattern="[0-9]*",
+            maxlength="6",
+            placeholder="······",
+            class="otp-input",
+            autofocus=True
+        ) }}
+        {% for error in form.code.errors %}
+          <span class="field-error">{{ error }}</span>
+        {% endfor %}
+      </label>
+
+      {{ form.submit(class="button button-full") }}
+    </form>
+
+    {% if attempts_left is defined %}
+    <p class="auth-attempts">
+      Intentos restantes: {{ attempts_left }} ·
+      el código expira en {{ ttl_minutes }} minutos
+    </p>
+    {% endif %}
+
+    <div class="auth-foot">
+      <a href="{{ url_for('auth.login') }}">Volver a iniciar sesión</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

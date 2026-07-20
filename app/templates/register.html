@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Crear cuenta{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <section class="auth-card">
+    <div class="auth-mark">S</div>
+
+    <h1>Crear cuenta</h1>
+    <p class="auth-sub">
+      Regístrate con tu correo. Te enviaremos un código
+      para confirmar que la dirección es tuya.
+    </p>
+
+    <form method="post" class="auth-form">
+      {{ form.hidden_tag() }}
+
+      <label class="field">
+        {{ form.name.label.text }}
+        {{ form.name(
+            autocomplete="name",
+            placeholder="Tu nombre",
+            autofocus=True
+        ) }}
+        {% for error in form.name.errors %}
+          <span class="field-error">{{ error }}</span>
+        {% endfor %}
+      </label>
+
+      <label class="field">
+        {{ form.email.label.text }}
+        {{ form.email(
+            autocomplete="email",
+            placeholder="correo@ejemplo.com"
+        ) }}
+        {% for error in form.email.errors %}
+          <span class="field-error">{{ error }}</span>
+        {% endfor %}
+      </label>
+
+      <label class="field">
+        {{ form.password.label.text }}
+        {{ form.password(
+            autocomplete="new-password",
+            placeholder="Mínimo 12 caracteres"
+        ) }}
+        {% for error in form.password.errors %}
+          <span class="field-error">{{ error }}</span>
+        {% endfor %}
+      </label>
+
+      <label class="field">
+        {{ form.confirm.label.text }}
+        {{ form.confirm(
+            autocomplete="new-password",
+            placeholder="Repite la contraseña"
+        ) }}
+        {% for error in form.confirm.errors %}
+          <span class="field-error">{{ error }}</span>
+        {% endfor %}
+      </label>
+
+      {{ form.submit(class="button button-full") }}
+    </form>
+
+    <div class="auth-note">
+      Tu contraseña se almacena con Argon2id, salt único y
+      pepper del servidor. Nunca se guarda en texto plano.
+    </div>
+
+    <div class="auth-foot">
+      ¿Ya tienes cuenta?
+      <a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

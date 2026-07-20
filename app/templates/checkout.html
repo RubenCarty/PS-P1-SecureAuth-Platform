@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Pago simulado{% endblock %}
+
+{% block content %}
+<section class="checkout">
+    <p class="eyebrow">CHECKOUT SEGURO</p>
+    <h1>Finalizar compra</h1>
+
+    <div class="alert warning">
+        Simulador académico. No ingreses datos financieros reales.
+    </div>
+
+    <div class="card">
+        <h2>Resumen del pedido</h2>
+
+        {% for item in cart_items %}
+            <div class="order-line">
+                <span>
+                    {{ item.product.name }}
+                    × {{ item.quantity }}
+                </span>
+
+                <strong>
+                    S/
+                    {{ "%.2f"|format(
+                        item.product.price * item.quantity
+                    ) }}
+                </strong>
+            </div>
+        {% endfor %}
+
+        <hr>
+
+        <div class="order-line">
+            <strong>Total</strong>
+            <strong>
+                S/ {{ "%.2f"|format(total) }}
+            </strong>
+        </div>
+    </div>
+
+    <form method="post" class="card">
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+        >
+
+        <h2>Método de pago</h2>
+
+        <div class="form-group">
+            <label for="payment_method">
+                Tipo de pago
+            </label>
+
+            <select
+                id="payment_method"
+                name="payment_method"
+                required
+            >
+                <option value="card">
+                    Tarjeta de crédito o débito
+                </option>
+
+                <option value="wallet">
+                    Yape o Plin
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="provider">
+                Proveedor
+            </label>
+
+            <select
+                id="provider"
+                name="provider"
+                required
+            >
+                <option value="BCP">BCP</option>
+                <option value="BBVA">BBVA</option>
+                <option value="Interbank">Interbank</option>
+                <option value="Mastercard">Mastercard</option>
+                <option value="American Express">
+                    American Express
+                </option>
+                <option value="Yape">Yape</option>
+                <option value="Plin">Plin</option>
+            </select>
+        </div>
+
+        <fieldset>
+            <legend>Tarjeta simulada</legend>
+
+            <div class="form-group">
+                <label for="card_number">
+                    Número de tarjeta
+                </label>
+
+                <input
+                    id="card_number"
+                    name="card_number"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    maxlength="19"
+                    placeholder="4111111111111111"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="cardholder">
+                    Nombre del titular
+                </label>
+
+                <input
+                    id="cardholder"
+                    name="cardholder"
+                    autocomplete="off"
+                    maxlength="120"
+                    placeholder="USUARIO PRUEBA"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="expiry">
+                    Fecha de vencimiento
+                </label>
+
+                <input
+                    id="expiry"
+                    name="expiry"
+                    autocomplete="off"
+                    maxlength="5"
+                    placeholder="12/30"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="cvv">
+                    CVV de prueba
+                </label>
+
+                <input
+                    id="cvv"
+                    name="cvv"
+                    type="password"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    maxlength="4"
+                    placeholder="123"
+                >
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Yape o Plin simulado</legend>
+
+            <div class="form-group">
+                <label for="phone">
+                    Número de celular
+                </label>
+
+                <input
+                    id="phone"
+                    name="phone"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    maxlength="9"
+                    placeholder="999999999"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="validation_token">
+                    Código de validación
+                </label>
+
+                <input
+                    id="validation_token"
+                    name="validation_token"
+                    type="password"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    maxlength="6"
+                    placeholder="123456"
+                >
+            </div>
+
+            <p class="security-note">
+                Código académico de prueba:
+                <strong>123456</strong>
+            </p>
+        </fieldset>
+
+        <button class="button" type="submit">
+            Confirmar compra
+        </button>
+    </form>
+</section>
+{% endblock %}

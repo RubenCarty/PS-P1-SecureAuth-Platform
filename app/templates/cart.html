@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Carrito · SecureAuth Store{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+  <div>
+    <span class="eyebrow">Tu selección</span>
+    <h1>Carrito de compras</h1>
+  </div>
+</div>
+
+{% if items %}
+  <div class="cart-layout">
+    <section class="cart-list">
+      {% for item in items %}
+        <article class="cart-item">
+          <div>
+            <span class="category">{{ item.product.category }}</span>
+            <h2>{{ item.product.name }}</h2>
+            <p>S/ {{ '%.2f'|format(item.product.price) }} por unidad</p>
+          </div>
+
+          <div class="cart-actions">
+            <form
+              method="post"
+              action="{{ url_for('store.update_cart', item_id=item.id) }}"
+            >
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              >
+              <label>
+                Cantidad
+                <input
+                  type="number"
+                  name="quantity"
+                  value="{{ item.quantity }}"
+                  min="1"
+                  max="{{ [item.product.stock, 20]|min }}"
+                >
+              </label>
+              <button class="button button-small button-secondary" type="submit">
+                Actualizar
+              </button>
+            </form>
+
+            <form
+              method="post"
+              action="{{ url_for('store.update_cart', item_id=item.id) }}"
+            >
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              >
+              <input type="hidden" name="quantity" value="0">
+              <button class="link-button danger-link" type="submit">
+                Eliminar
+              </button>
+            </form>
+          </div>
+
+          <strong>
+            S/ {{ '%.2f'|format(item.product.price * item.quantity) }}
+          </strong>
+        </article>
+      {% endfor %}
+    </section>
+
+    <aside class="summary-card">
+      <span>Total</span>
+      <strong>S/ {{ '%.2f'|format(total) }}</strong>
+      <small>
+        El total se calcula en el servidor a partir de los
+        precios vigentes. El navegador no puede alterarlo.
+      </small>
+      <a class="button button-full" href="{{ url_for('store.checkout') }}">
+        Proceder al pago
+      </a>
+      <a class="button button-full button-secondary" href="{{ url_for('store.catalog') }}">
+        Seguir comprando
+      </a>
+    </aside>
+  </div>
+{% else %}
+  <div class="empty-state">
+    <h2>Tu carrito está vacío</h2>
+    <p>Explora el catálogo y agrega productos para continuar.</p>
+    <p>
+      <a class="button" href="{{ url_for('store.catalog') }}">
+        Ver catálogo
+      </a>
+    </p>
+  </div>
+{% endif %}
+{% endblock %}
