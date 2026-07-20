@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+.venv/
+__pycache__/
+*.py[cod]
+.env
+*.db
+instance/
+.pytest_cache/
+.coverage
+htmlcov/
+.vscode/settings.json
+*.log
+=======
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -216,3 +229,4 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+>>>>>>> b3f86e816f087e978efef383d2a3b29bf96cf4b3

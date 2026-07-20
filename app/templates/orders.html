@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Pedidos · SecureAuth Store{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">Historial</span><h1>Mis pedidos</h1></div></div>
+<div class="order-list">
+  {% for order in orders %}
+    <article class="order-card">
+      <div class="order-header"><div><strong>Pedido #{{ order.id }}</strong><span>{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</span></div><span class="badge">{{ order.status }}</span></div>
+      <ul>
+        {% for item in order.items %}<li><span>{{ item.product_name }} × {{ item.quantity }}</span><strong>S/ {{ '%.2f'|format(item.unit_price * item.quantity) }}</strong></li>{% endfor %}
+      </ul>
+      <div class="order-total"><span>Total</span><strong>S/ {{ '%.2f'|format(order.total) }}</strong></div>
+    </article>
+  {% else %}
+    <div class="empty-state"><h2>Aún no tienes pedidos</h2><a class="button" href="{{ url_for('store.catalog') }}">Ver productos</a></div>
+  {% endfor %}
+</div>
+{% endblock %}
