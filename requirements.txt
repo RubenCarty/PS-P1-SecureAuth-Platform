@@ -10,7 +10,7 @@ azure-storage-blob>=12.30.0,<13
 pyodbc>=5.2,<6
 Pillow>=12.3.0,<13
 python-dotenv>=1.2.2,<2
-gunicorn>=23,<24
+gunicorn>=26.0.0,<27
 pytest>=8,<10
 
 argon2-cffi==25.1.0
