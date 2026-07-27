@@ -11,6 +11,6 @@ pyodbc>=5.2,<6
 Pillow>=12.3.0,<13
 python-dotenv>=1.2.2,<2
 gunicorn>=23,<24
-pytest>=8,<10
+pytest>=9.1.1,<10
 
 argon2-cffi==25.1.0
